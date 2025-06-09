@@ -1,0 +1,13 @@
+[Unit]
+Description=JIMS Webserver
+After=network.target
+
+[Service]
+type=Simple
+ExecStart=/opt/jims/sensor-daemon/venv/bin/python sensor_daemon.py /opt/jims/data/db.sqlite
+WorkingDirectory=/opt/jims/sensor_daemon/
+Restart=on-failure
+User=jay
+
+[Install]
+WantedBy=multi-user.target

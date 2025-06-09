@@ -1,0 +1,13 @@
+[Unit]
+Description=JIMS Webserver
+After=network.target
+
+[Service]
+type=Simple
+ExecStart=/opt/jims/webserver /opt/jims/data/db.sqlite
+WorkingDirectory=/opt/jims
+Restart=on-failure
+User=jay
+
+[Install]
+WantedBy=multi-user.target

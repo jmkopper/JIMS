@@ -23,7 +23,7 @@ sudo mkdir -p /opt/jims/data
 echo "==> Copying binaries and Python code..."
 sudo cp webserver/target/release/webserver /opt/jims/
 sudo cp stats-daemon/target/release/stats-daemon /opt/jims/
-sudo rsync -a --exclude 'venv' sensor-daemon/ /opt/jims/sensor-daemon/
+sudo cp -r sensor-daemon/ /opt/jims/sensor-daemon/
 
 echo "==> Copying systemd service files..."
 sudo cp systemd/jims-*.service /etc/systemd/system/
@@ -41,5 +41,8 @@ echo "==> Starting services..."
 sudo systemctl start jims-webserver.service
 sudo systemctl start jims-stats-daemon.service
 sudo systemctl start jims-sensor-daemon.service
+
+echo "==> Cleaning up..."
+sudo rm -r sensor-daemon/venv
 
 echo "JIMS installation complete."

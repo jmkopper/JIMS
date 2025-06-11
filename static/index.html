@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Stats</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            font-size: 1.5rem;
+            margin: 10px 0;
+        }
+
+        .mini-stat {
+            font-size: 1rem;
+            margin: 10px 0;
+            color: #888;
+        }
+
+        .timestamp {
+            font-size: 1.0rem;
+            margin: 10px 0;
+            color: #bbb;
+        }
+
+        .stat span {
+            font-weight: bold;
+        }
+
+        .loading {
+            font-size: 1.2rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>System Stats</h1>
+        <div class="loading" id="loading">Loading...</div>
+        <div class="stat" id="temperature"></div>
+        <div class="stat" id="humidity"></div>
+        <div class="mini-stat" id="cpu-temp"></div>
+        <div class="mini-stat" id="cpu-usage"></div>
+        <div class="mini-stat" id="memory-usage"></div>
+        <div class="timestamp" id="sensor-timestamp"></div>
+        <div class="timestamp" id="cpu-timestamp"></div>
+    </div>
+
+    <script>
+        function format_date(unix_timestamp) {
+            const date = new Date(unix_timestamp * 1000); // Convert to milliseconds
+
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const day = String(date.getDate()).padStart(2, '0');
+
+            let hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+
+            const ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 0 becomes 12
+            const f_hours = String(hours).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${f_hours}:${minutes}:${seconds} ${ampm}`;
+        }
+
+        async function fetchStats() {
+            try {
+                const response = await fetch('/system_stats');
+                if (!response.ok) throw new Error('Failed to fetch ssystem stats');
+                
+                const data = await response.json();
+                var date = format_date(data.timestamp);
+                document.getElementById('cpu-temp').innerHTML = `CPU Temperature: <span>${data.cpu_temp.toFixed(2)}°C</span>`;
+                document.getElementById('cpu-usage').innerHTML = `CPU Usage: <span>${data.cpu_usage.toFixed(2)}%</span>`;
+                document.getElementById('memory-usage').innerHTML = `Memory Usage: <span>${data.mem_usage.toFixed(2)}%</span>`;
+                document.getElementById('cpu-timestamp').innerHTML = `System readings from <span>${date}</span>`;
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                document.getElementById('loading').innerHTML = `Error: ${error.message}`;
+            }
+        }
+
+        async function fetchReadings() {
+            try {
+                const response = await fetch('/sensor_readings');
+                if (!response.ok) throw new Error('Failed to fetch sensor readings');
+                
+                const data = await response.json();
+                var date = format_date(data.timestamp);
+                document.getElementById('temperature').innerHTML = `Temperature: <span>${data.temperature.toFixed(2)}°C</span>`;
+                document.getElementById('humidity').innerHTML = `Humidity: <span>${data.humidity.toFixed(2)}%</span>`;
+                document.getElementById('sensor-timestamp').innerHTML = `Sensor readings from <span>${date}</span>`;
+            } catch (error) {
+                document.getElementById('loading').innerHTML = `Error: ${error.message}`;
+            }
+        }
+
+        async function fetchAll() {
+            await fetchReadings();
+            await fetchStats();
+        }
+
+        // Fetch stats when the page loads
+        window.onload = fetchAll;
+    </script>
+</body>
+</html>

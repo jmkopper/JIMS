@@ -19,11 +19,13 @@ cd ..
 
 echo "==> Creating directories in /opt/jims..."
 sudo mkdir -p /opt/jims/data
+sudo mkdir -p /opt/jims/static
 
 echo "==> Copying binaries and Python code..."
 sudo cp webserver/target/release/webserver /opt/jims/
 sudo cp stats-daemon/target/release/stats-daemon /opt/jims/
 sudo cp -r sensor-daemon/ /opt/jims/sensor-daemon/
+sudo cp static/index.html /opt/jims/static/
 
 echo "==> Copying systemd service files..."
 sudo cp systemd/jims-*.service /etc/systemd/system/

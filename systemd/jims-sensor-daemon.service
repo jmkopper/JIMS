@@ -3,7 +3,7 @@ Description=JIMS Webserver
 After=network.target
 
 [Service]
-type=Simple
+Type=simple
 ExecStart=/opt/jims/sensor-daemon/venv/bin/python sensor-daemon/sensor_daemon.py /opt/jims/data/db.sqlite
 WorkingDirectory=/opt/jims/
 Restart=on-failure

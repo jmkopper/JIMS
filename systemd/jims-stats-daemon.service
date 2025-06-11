@@ -5,7 +5,7 @@ After=network.target
 [Service]
 type=Simple
 ExecStart=/opt/jims/stats-daemon /opt/jims/data/db.sqlite
-WorkingDirectory=/opt/jims
+WorkingDirectory=/opt/jims/
 Restart=on-failure
 User=jay
 

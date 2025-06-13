@@ -1,6 +1,6 @@
 # Jay's Incredible Monitoring Service (JIMS)
 
-Monitoring service for a Raspberry PI with an [Adafruit SHT41](https://www.adafruit.com/product/5776) temperature and humidity sensor. Builds a sqlite database and logs temperature, humidity, cpu temperature, cpu usage, and memory usage every minute. JIMS also runs a thin HTTP web server to display the most recent stats.
+Monitoring service for a Raspberry Pi with an [Adafruit SHT41](https://www.adafruit.com/product/5776) temperature and humidity sensor. Builds a sqlite database and logs temperature, humidity, cpu temperature, cpu usage, and memory usage every minute. JIMS also runs a thin HTTP web server to display the most recent stats.
 
 ## Installation
 
